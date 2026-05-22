@@ -56,7 +56,7 @@ class DailyLogItem(BaseModel):
     food_name: str
     quantity: float
     unit: str
-    meal: str  # breakfast, lunch, dinner, snack
+    meal: Optional[str] = None  # breakfast, lunch, dinner, snack
     calories: float
     protein: float
     carbs: float
@@ -70,6 +70,8 @@ class LogMealRequest(BaseModel):
     date: str  # YYYY-MM-DD
     meal: str  # breakfast, lunch, dinner, snack
     items: List[DailyLogItem]
+    overwrite: bool = False
+
 
 # Parse food request
 class ParseFoodRequest(BaseModel):
@@ -94,3 +96,21 @@ class KnowledgeUploadRequest(BaseModel):
 
 class KnowledgeQueryRequest(BaseModel):
     query: str
+
+class MoveMealItemRequest(BaseModel):
+    user_id: str = "default"
+    date: str
+    from_meal: str
+    to_meal: str
+    item_index: int
+
+class UserProfileCreate(BaseModel):
+    user_id: str
+    name: str
+    role: str = "user"
+    calories: float = 1550.0
+    protein: float = 100.0
+    carbs: float = 160.0
+    fat: float = 30.0
+    fiber: float = 25.0
+

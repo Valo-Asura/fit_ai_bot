@@ -642,3 +642,69 @@ button:disabled {
 .inverted-section button:hover {
   box-shadow: 0 0 20px rgba(255, 214, 0, 0.5) !important;
 }
+
+/* Premium Verify & Confirm Parsing Table Styles */
+.review-card input[type="text"], 
+.review-card input[type="number"] {
+  border: none !important;
+  border-bottom: 1px solid transparent !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  transition: all 0.2s ease-in-out;
+  padding: 0.25rem 0.15rem !important;
+  height: 32px !important;
+  width: 100% !important;
+  font-family: var(--font-mono) !important;
+}
+
+/* Hide number input spinners (arrows) to free up horizontal space in macro columns */
+.review-card input[type="number"]::-webkit-outer-spin-button,
+.review-card input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+.review-card input[type="number"] {
+  -moz-appearance: textfield !important;
+  text-align: right !important;
+}
+
+.review-card input:focus {
+  border-bottom: 1px solid var(--primary) !important;
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.review-card select {
+  border: 1px solid var(--border) !important;
+  border-radius: 6px !important;
+  background-color: var(--bg-tertiary) !important;
+  font-family: var(--font-body) !important;
+  text-transform: capitalize;
+}
+
+.review-card select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 10px rgba(247, 147, 26, 0.2) !important;
+}
+
+.review-card input[type="date"] {
+  border: 1px solid var(--border) !important;
+  border-radius: 6px !important;
+  background-color: var(--bg-tertiary) !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+.review-card input[type="date"]:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 10px rgba(247, 147, 26, 0.2) !important;
+}
+
+.review-card tr:hover {
+  background-color: rgba(255, 255, 255, 0.015);
+}
+
+.review-card tr:hover input {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}

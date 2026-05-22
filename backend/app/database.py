@@ -269,9 +269,9 @@ async def init_db():
         # 1.5s timeout for fast fallback
         client = AsyncIOMotorClient(settings.MONGODB_URI, serverSelectionTimeoutMS=1500)
         await client.server_info()
-        db = client.get_database()
+        db = client.get_database(settings.MONGODB_DB)
         use_mock_db = False
-        logger.info("Successfully connected to MongoDB.")
+        logger.info(f"Successfully connected to MongoDB database: {settings.MONGODB_DB}.")
         
         # Setup indexes asynchronously (if using real DB)
         await db["foods"].create_index("name", unique=True)

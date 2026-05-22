@@ -43,16 +43,23 @@ GROQ_API_KEY=your_groq_key
 GROQ_MODEL=llama3-70b-8192
 
 GEMINI_API_KEY=your_gemini_key
-GEMINI_MODEL=gemini-1.5-flash
+GEMINI_MODEL=gemini-3.5-flash
 
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=qwen3:4b
 
 # Selected Active Provider (groq | gemini | ollama | rules)
-LLM_PROVIDER=groq
+LLM_PROVIDER=gemini
 
-# MongoDB Connection String (Leave blank or invalid for automatic In-Memory fallback)
-MONGODB_URI=mongodb://localhost:27017/fit_ai
+# MongoDB Connection String & DB Name
+MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/
+MONGODB_DB=fit_app
+
+# Pinecone Vector DB Configuration (For Production RAG)
+PINECONE_API_KEY=your_pinecone_api_key
+PINECONE_INDEX_NAME=rag-chatbot-2
+PINECONE_CLOUD=aws
+PINECONE_REGION=us-east-1
 ```
 
 ---

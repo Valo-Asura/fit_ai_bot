@@ -24,7 +24,10 @@ from app.models import (
     RecipeCreate,
     FoodPreset,
     KnowledgeUploadRequest,
-    KnowledgeQueryRequest
+    KnowledgeQueryRequest,
+    MoveMealItemRequest,
+    UserProfileCreate,
+    Food
 )
 from app.parser import parse_food_input
 from app.calculator import (
@@ -221,9 +224,11 @@ async def log_meal(payload: LogMealRequest):
     if not log_doc:
         log_doc = get_empty_log(payload.user_id, payload.date)
         
-    # Append new items to the target meal list
+    # Append or overwrite items for the target meal list
     meal_key = payload.meal.lower()
-    if meal_key not in log_doc["meals"]:
+    if payload.overwrite:
+        log_doc["meals"][meal_key] = []
+    elif meal_key not in log_doc["meals"]:
         log_doc["meals"][meal_key] = []
         
     # Standardize input items
@@ -236,6 +241,9 @@ async def log_meal(payload: LogMealRequest):
         all_items.extend(m_items)
         
     log_doc["totals"] = sum_item_macros(all_items)
+    
+    # Pop _id to avoid immutable field update error in MongoDB
+    log_doc.pop("_id", None)
     
     # Save back to database
     await daily_logs_collection.update_one(
@@ -258,6 +266,8 @@ async def get_day_log(user_id: str = "default", date: str = None):
     log_doc = await daily_logs_collection.find_one({"user_id": user_id, "date": date})
     if not log_doc:
         log_doc = get_empty_log(user_id, date)
+    else:
+        log_doc.pop("_id", None)
         
     targets = await get_user_targets(user_id)
     totals = log_doc["totals"]
@@ -393,3 +403,138 @@ async def query_knowledge(payload: KnowledgeQueryRequest):
         raise HTTPException(status_code=400, detail="Query cannot be empty.")
     matches = await query_rag(payload.query)
     return {"status": "success", "matches": matches}
+
+# User Profile list and creation
+@app.get("/api/users")
+async def list_users():
+    cursor = users_collection.find()
+    users = await cursor.to_list()
+    # If the default user is not in the db, we add it automatically
+    has_default = any(u.get("user_id") == "default" for u in users)
+    if not has_default:
+        default_user = {
+            "user_id": "default",
+            "name": "Default User",
+            "role": "user",
+            "calories": 1550.0,
+            "protein": 100.0,
+            "carbs": 160.0,
+            "fat": 30.0,
+            "fiber": 25.0
+        }
+        await users_collection.insert_one(default_user)
+        users.append(default_user)
+        
+    # Also guarantee an admin user exists for testing
+    has_admin = any(u.get("user_id") == "admin" for u in users)
+    if not has_admin:
+        admin_user = {
+            "user_id": "admin",
+            "name": "System Admin",
+            "role": "admin",
+            "calories": 2000.0,
+            "protein": 130.0,
+            "carbs": 200.0,
+            "fat": 50.0,
+            "fiber": 30.0
+        }
+        await users_collection.insert_one(admin_user)
+        users.append(admin_user)
+        
+    for u in users:
+        u.pop("_id", None)
+    return users
+
+@app.post("/api/users")
+async def save_user(payload: UserProfileCreate):
+    existing = await users_collection.find_one({"user_id": payload.user_id})
+    doc = payload.model_dump()
+    if existing:
+        await users_collection.update_one({"user_id": payload.user_id}, {"$set": doc})
+    else:
+        await users_collection.insert_one(doc)
+    return {"status": "success", "user": doc}
+
+@app.delete("/api/users/{user_id}")
+async def delete_user(user_id: str):
+    if user_id in ["default", "admin"]:
+        raise HTTPException(status_code=400, detail="Cannot delete default or admin user.")
+    await users_collection.delete_one({"user_id": user_id})
+    return {"status": "success"}
+
+# Move items between meal slots
+@app.post("/api/move-meal-item")
+async def move_meal_item(payload: MoveMealItemRequest):
+    log_doc = await daily_logs_collection.find_one({"user_id": payload.user_id, "date": payload.date})
+    if not log_doc:
+        raise HTTPException(status_code=404, detail="Daily log not found.")
+        
+    from_meal = payload.from_meal.lower()
+    to_meal = payload.to_meal.lower()
+    
+    if from_meal not in log_doc["meals"] or to_meal not in log_doc["meals"]:
+        raise HTTPException(status_code=400, detail="Invalid meal categories.")
+        
+    items = log_doc["meals"][from_meal]
+    if payload.item_index < 0 or payload.item_index >= len(items):
+        raise HTTPException(status_code=400, detail="Invalid item index.")
+        
+    # Pop and insert
+    moved_item = items.pop(payload.item_index)
+    log_doc["meals"][to_meal].append(moved_item)
+    
+    # Recalculate totals
+    all_items = []
+    for m_type, m_items in log_doc["meals"].items():
+        all_items.extend(m_items)
+    log_doc["totals"] = sum_item_macros(all_items)
+    
+    log_doc.pop("_id", None)
+    await daily_logs_collection.update_one(
+        {"user_id": payload.user_id, "date": payload.date},
+        {"$set": log_doc},
+        upsert=True
+    )
+    return {"status": "success", "log": log_doc}
+
+# Foods management for Admin Page
+@app.get("/api/foods")
+async def list_all_foods():
+    cursor = foods_collection.find()
+    foods = await cursor.to_list()
+    for f in foods:
+        f.pop("_id", None)
+    return foods
+
+@app.post("/api/foods")
+async def save_food(payload: Food):
+    existing = await foods_collection.find_one({"name": payload.name})
+    doc = payload.model_dump()
+    if existing:
+        await foods_collection.update_one({"name": payload.name}, {"$set": doc})
+    else:
+        await foods_collection.insert_one(doc)
+    await refresh_caches()
+    return {"status": "success", "food": doc}
+
+@app.delete("/api/foods/{food_name}")
+async def delete_food(food_name: str):
+    await foods_collection.delete_one({"name": food_name})
+    await refresh_caches()
+    return {"status": "success"}
+
+# Presets list for Admin Page
+@app.get("/api/presets")
+async def list_all_presets():
+    cursor = user_food_presets_collection.find()
+    presets = await cursor.to_list()
+    for p in presets:
+        p.pop("_id", None)
+    return presets
+
+@app.delete("/api/presets/{preset_name}")
+async def delete_preset(preset_name: str, user_id: str = "default"):
+    await user_food_presets_collection.delete_one({"preset_name": preset_name, "user_id": user_id})
+    await refresh_caches()
+    return {"status": "success"}
+

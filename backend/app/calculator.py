@@ -297,8 +297,9 @@ async def calculate_macros_for_items(items: List[Dict], user_id: str = "default"
 
 def format_output_string(item: Dict) -> str:
     # Format: Name - Cal:X | P:Xg | C:Xg | F:Xg | Fi:Xg [HP/HC/HF/HFi] [EXACT/PRESET/EST]
+    est_prefix = "~" if item.get("accuracy") == "EST" else ""
     tags_str = f" [{' / '.join(item['rich_tags'])}]" if item["rich_tags"] else ""
     return (
-        f"{item['food_name']} - Cal:{item['calories']} | P:{item['protein']}g | "
-        f"C:{item['carbs']}g | F:{item['fat']}g | Fi:{item['fiber']}g{tags_str} [{item['accuracy']}]"
+        f"{item['food_name']} - Cal:{est_prefix}{item['calories']} | P:{est_prefix}{item['protein']}g | "
+        f"C:{est_prefix}{item['carbs']}g | F:{est_prefix}{item['fat']}g | Fi:{est_prefix}{item['fiber']}g{tags_str} [{item['accuracy']}]"
     )

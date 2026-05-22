@@ -5,7 +5,15 @@ from pydantic import Field
 class Settings(BaseSettings):
     PORT: int = Field(default=8000, validation_alias="PORT")
     MONGODB_URI: str = Field(default="mongodb://localhost:27017/fit_ai", validation_alias="MONGODB_URI")
+    MONGODB_DB: str = Field(default="fit_ai", validation_alias="MONGODB_DB")
+    DATABASE_URL: str = Field(default="sqlite+aiosqlite:///./fit_ai.db", validation_alias="DATABASE_URL")
     LLM_PROVIDER: str = Field(default="gemini", validation_alias="LLM_PROVIDER")
+    
+    # Pinecone
+    PINECONE_API_KEY: str = Field(default="", validation_alias="PINECONE_API_KEY")
+    PINECONE_INDEX_NAME: str = Field(default="rag-chatbot-2", validation_alias="PINECONE_INDEX_NAME")
+    PINECONE_CLOUD: str = Field(default="aws", validation_alias="PINECONE_CLOUD")
+    PINECONE_REGION: str = Field(default="us-east-1", validation_alias="PINECONE_REGION")
     
     # API Keys & Models
     GROQ_API_KEY: str = Field(default="", validation_alias="GROQ_API_KEY")
