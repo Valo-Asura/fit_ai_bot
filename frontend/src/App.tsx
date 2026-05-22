@@ -13,7 +13,9 @@ import {
   AlertCircle,
   CheckCircle,
   ChefHat,
-  Bookmark
+  Bookmark,
+  Sun,
+  Moon
 } from 'lucide-react';
 import './App.css';
 
@@ -70,7 +72,24 @@ interface SearchResult {
 }
 
 export default function App() {
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    return (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
+  });
 
+  useEffect(() => {
+    if (theme === 'light') {
+      document.body.classList.add('light');
+      document.body.classList.remove('dark');
+    } else {
+      document.body.classList.add('dark');
+      document.body.classList.remove('light');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   // Navigation tab
   const [activeTab, setActiveTab] = useState<'dashboard' | 'presets' | 'recipes' | 'rag'>('dashboard');
@@ -560,6 +579,27 @@ export default function App() {
             DB: {dbStatus.toUpperCase()}
           </span>
           <span>SYSTEM ONLINE</span>
+          <button 
+            onClick={toggleTheme} 
+            style={{
+              background: 'transparent',
+              border: '1px solid var(--border)',
+              padding: '0.2rem 0.6rem',
+              fontSize: '0.75rem',
+              color: 'var(--text-secondary)',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              textTransform: 'uppercase',
+              fontFamily: 'var(--font-mono)',
+              height: 'auto'
+            }}
+          >
+            {theme === 'dark' ? <Sun size={12} /> : <Moon size={12} />}
+            <span>{theme === 'dark' ? 'LIGHT' : 'DARK'}</span>
+          </button>
         </div>
       </header>
 

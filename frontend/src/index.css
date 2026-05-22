@@ -22,18 +22,37 @@
   
   --border: rgba(255, 255, 255, 0.08); /* Dim Boundary */
   --border-active: rgba(247, 147, 26, 0.5);
+  
+  --grid-color: rgba(255, 255, 255, 0.015);
+  --input-bg: rgba(0, 0, 0, 0.3);
+  --input-bg-focus: rgba(0, 0, 0, 0.5);
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --header-bg: linear-gradient(180deg, #090B0F 0%, #030304 100%);
 }
 
-body.dark {
-  /* Aligned directly with dark default */
-  --bg-primary: #030304;
-  --bg-secondary: #0F1115;
-  --bg-tertiary: #1A1D24;
-  --text-primary: #FFFFFF;
-  --text-secondary: #94A3B8;
+body.light {
+  --bg-primary: #F8F9FA;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F1F5F9;
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
   --text-muted: #64748B;
+  
   --primary: #F7931A;
-  --border: rgba(255, 255, 255, 0.08);
+  --primary-hover: #EA580C;
+  --success: #D97706; /* High contrast gold/amber */
+  --danger: #EF4444;
+  --fiber: #059669;
+  
+  --border: #E2E8F0;
+  --border-active: var(--primary);
+  
+  --grid-color: rgba(15, 23, 42, 0.035);
+  --input-bg: rgba(15, 23, 42, 0.02);
+  --input-bg-focus: rgba(15, 23, 42, 0.04);
+  --card-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+  --header-bg: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
 }
 
 * {
@@ -54,8 +73,8 @@ body {
   /* Subtle ambient background grid representing blockchain network nodes */
   background-size: 40px 40px;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
 }
 
 /* Scrollbars - Bitcoin styled */
@@ -82,7 +101,7 @@ body {
   padding: 1.5rem;
   position: relative;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--card-shadow);
 }
 
 .hard-shadow-hover:hover {
@@ -120,7 +139,7 @@ input, textarea, select {
   padding: 0.5rem 0.75rem;
   border: none;
   border-bottom: 2px solid var(--border);
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: var(--input-bg);
   color: var(--text-primary);
   outline: none;
   border-radius: 4px 4px 0 0;
@@ -136,13 +155,13 @@ textarea {
 
 input:focus, select:focus {
   border-bottom-color: var(--primary);
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--input-bg-focus);
   box-shadow: 0 10px 15px -10px rgba(247, 147, 26, 0.15);
 }
 
 textarea:focus {
   border-color: var(--primary);
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--input-bg-focus);
   box-shadow: 0 0 15px -5px rgba(247, 147, 26, 0.15);
 }
 
@@ -243,7 +262,7 @@ button:disabled {
 
 /* Command Center Header */
 .app-header {
-  background: linear-gradient(180deg, #090B0F 0%, #030304 100%);
+  background: var(--header-bg);
   border-bottom: 1px solid var(--border);
   padding: 2rem;
   display: flex;
