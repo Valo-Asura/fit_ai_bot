@@ -563,23 +563,6 @@ export default function App() {
         </div>
       </header>
 
-      {/* Breaking News Ticker Marquee */}
-      <div className="marquee-container">
-        <div className="marquee-content">
-          <span className="marquee-item"><span className="marquee-badge">NODE STATUS</span>FITAI CORE LOG ENGINE - RUNNING ON CHAIN</span>
-          {dayLog && remaining ? (
-            <>
-              <span className="marquee-item"><span className="marquee-badge">METRICS</span>LOGGED: {Math.round(dayLog.totals.calories)} KCAL / {targets.calories} KCAL ({Math.round((dayLog.totals.calories / targets.calories) * 100)}%)</span>
-              <span className="marquee-item"><span className="marquee-badge">REMAINING</span>CALORIES LEFT: {Math.round(remaining.calories)} KCAL</span>
-              <span className="marquee-item"><span className="marquee-badge">PROTEIN</span>INLET: {dayLog.totals.protein.toFixed(1)}G / {targets.protein}G</span>
-              <span className="marquee-item"><span className="marquee-badge">FIBER</span>LOGGED: {dayLog.totals.fiber.toFixed(1)}G / {targets.fiber}G</span>
-            </>
-          ) : (
-            <span className="marquee-item"><span className="marquee-badge">STATUS</span>WAITING FOR CORE BLOCK METRICS TO PROPAGATE...</span>
-          )}
-          <span className="marquee-item"><span className="marquee-badge">SECURITY</span>VALIDATE MASS SEED ALIASES WITH MATHEMATICAL GRAM WEIGHING</span>
-        </div>
-      </div>
 
       {/* Main Content Area */}
       <main className="container">
