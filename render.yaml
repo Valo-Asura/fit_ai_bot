@@ -1,0 +1,38 @@
+services:
+  # 1. Backend FastAPI Service
+  - type: web
+    name: fit-ai-backend
+    env: python
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && PYTHONPATH=. uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB
+        value: fit_app
+      - key: PINECONE_API_KEY
+        sync: false
+      - key: PINECONE_INDEX_NAME
+        value: rag-chatbot-2
+      - key: PINECONE_CLOUD
+        value: aws
+      - key: PINECONE_REGION
+        value: us-east-1
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: gemini
+
+  # 2. Frontend React static site
+  - type: web
+    name: fit-ai-frontend
+    env: static
+    buildCommand: "cd frontend && npm install && npm run build"
+    publishPath: "frontend/dist"
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-store
+    envVars:
+      - key: VITE_API_BASE
+        value: https://fit-ai-backend.onrender.com # Change to backend service URL on Render
