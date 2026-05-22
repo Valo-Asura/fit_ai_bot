@@ -515,18 +515,21 @@ export default function App() {
     setCollapsedMeals(prev => ({ ...prev, [meal]: !prev[meal] }));
   };
 
-  // Stark Newsprint Metrics Box
+  // Bitcoin DeFi Metrics Block
   const renderProgressBar = (value: number, target: number, label: string, _colorClass: string, unit: string) => {
     const pct = Math.min(100, Math.max(0, Math.round((value / target) * 100))) || 0;
     
     return (
       <div className="macro-ring-container">
         <div className="macro-label">
-          <span>{label}</span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 'bold' }}>{pct}%</span>
+          <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, letterSpacing: '-0.3px' }}>{label}</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--primary)' }}>{pct}%</span>
         </div>
-        <div style={{ fontSize: '1.75rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '0.15rem 0', lineHeight: 1.1 }}>
-          {value.toFixed(1)} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', fontFamily: 'var(--font-sans)', textTransform: 'uppercase' }}>{unit}</span>
+        <div style={{ fontSize: '1.6rem', fontWeight: 700, fontFamily: 'var(--font-mono)', margin: '0.2rem 0', lineHeight: 1.1 }}>
+          {value.toFixed(1)} <span style={{ fontSize: '0.75rem', fontWeight: 'normal', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>{unit}</span>
+        </div>
+        <div style={{ width: '100%', height: '4px', backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '999px', marginTop: '0.5rem', marginBottom: '0.75rem', overflow: 'hidden' }}>
+          <div style={{ width: `${pct}%`, height: '100%', background: 'linear-gradient(to right, var(--primary-hover), var(--primary))', borderRadius: '999px', boxShadow: '0 0 8px var(--primary)' }} />
         </div>
         <div className="stats-mono" style={{ fontSize: '0.75rem', marginTop: 'auto' }}>
           Target: {target} {unit}
@@ -537,41 +540,44 @@ export default function App() {
 
   return (
     <div style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', minHeight: '100vh' }}>
-      {/* Newspaper Plate Header */}
+      {/* Bitcoin DeFi Header */}
       <header className="app-header">
         <div className="logo-container">
-          THE FITAI CHRONICLE
+          FITAI DEFI COMMAND
         </div>
         <div className="edition-bar">
-          <span>Vol. I — No. 42</span>
-          <span>May 22, 2026</span>
+          <span>SECURE NETWORK NODE</span>
+          <span>EST. 2026</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <span style={{
-              width: 8, height: 8,
-              backgroundColor: dbStatus === 'mongodb' ? 'var(--text-primary)' : 'var(--warning)',
-              display: 'inline-block'
+              width: 8,
+              height: 8,
+              borderRadius: '50%',
+              backgroundColor: dbStatus === 'mongodb' ? 'var(--primary)' : 'var(--danger)',
+              display: 'inline-block',
+              boxShadow: dbStatus === 'mongodb' ? '0 0 8px var(--primary)' : 'none'
             }} />
             DB: {dbStatus.toUpperCase()}
           </span>
-          <span>Morning Edition</span>
+          <span>SYSTEM ONLINE</span>
         </div>
       </header>
 
       {/* Breaking News Ticker Marquee */}
       <div className="marquee-container">
         <div className="marquee-content">
-          <span className="marquee-item"><span className="marquee-badge">BREAKING</span>FITAI TRACKER ONLINE - ISSUED FOR HOME CALORIE TRACKING</span>
+          <span className="marquee-item"><span className="marquee-badge">NODE STATUS</span>FITAI CORE LOG ENGINE - RUNNING ON CHAIN</span>
           {dayLog && remaining ? (
             <>
-              <span className="marquee-item"><span className="marquee-badge">CALORIES</span>LOGGED: {Math.round(dayLog.totals.calories)} KCAL / {targets.calories} KCAL ({Math.round((dayLog.totals.calories / targets.calories) * 100)}%)</span>
+              <span className="marquee-item"><span className="marquee-badge">METRICS</span>LOGGED: {Math.round(dayLog.totals.calories)} KCAL / {targets.calories} KCAL ({Math.round((dayLog.totals.calories / targets.calories) * 100)}%)</span>
               <span className="marquee-item"><span className="marquee-badge">REMAINING</span>CALORIES LEFT: {Math.round(remaining.calories)} KCAL</span>
               <span className="marquee-item"><span className="marquee-badge">PROTEIN</span>INLET: {dayLog.totals.protein.toFixed(1)}G / {targets.protein}G</span>
               <span className="marquee-item"><span className="marquee-badge">FIBER</span>LOGGED: {dayLog.totals.fiber.toFixed(1)}G / {targets.fiber}G</span>
             </>
           ) : (
-            <span className="marquee-item"><span className="marquee-badge">STATUS</span>WAITING FOR DAILY LOG DATA TO LOAD...</span>
+            <span className="marquee-item"><span className="marquee-badge">STATUS</span>WAITING FOR CORE BLOCK METRICS TO PROPAGATE...</span>
           )}
-          <span className="marquee-item"><span className="marquee-badge">ADVISORY</span>LOG ACCURACY CATEGORIES CAREFULLY - EXACT WEIGHTS ARE HIGHLY PREFERRED</span>
+          <span className="marquee-item"><span className="marquee-badge">SECURITY</span>VALIDATE MASS SEED ALIASES WITH MATHEMATICAL GRAM WEIGHING</span>
         </div>
       </div>
 
@@ -581,9 +587,9 @@ export default function App() {
         {apiSuccessMsg && (
           <div style={{
             display: 'flex', alignItems: 'center', gap: '0.5rem',
-            backgroundColor: 'var(--success-light)', color: 'var(--success)',
-            padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)',
-            border: '1px solid rgba(16, 185, 129, 0.2)', marginBottom: '1rem',
+            backgroundColor: 'rgba(255, 214, 0, 0.08)', color: 'var(--success)',
+            padding: '0.75rem 1rem', borderRadius: '8px',
+            border: '1px solid rgba(255, 214, 0, 0.25)', marginBottom: '1rem',
             fontSize: '0.9rem', fontWeight: 600
           }}>
             <CheckCircle size={18} />
@@ -593,9 +599,9 @@ export default function App() {
         {apiErrorMsg && (
           <div style={{
             display: 'flex', alignItems: 'center', gap: '0.5rem',
-            backgroundColor: 'var(--danger-light)', color: 'var(--danger)',
-            padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)',
-            border: '1px solid rgba(239, 68, 68, 0.2)', marginBottom: '1rem',
+            backgroundColor: 'rgba(239, 68, 68, 0.08)', color: 'var(--danger)',
+            padding: '0.75rem 1rem', borderRadius: '8px',
+            border: '1px solid rgba(239, 68, 68, 0.25)', marginBottom: '1rem',
             fontSize: '0.9rem', fontWeight: 600
           }}>
             <AlertCircle size={18} />
@@ -620,7 +626,7 @@ export default function App() {
         </div>
 
         {/* Date Selector Widget */}
-        <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', padding: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+        <div className="card hard-shadow-hover" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', padding: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Calendar size={20} style={{ color: 'var(--primary)' }} />
             <span style={{ fontWeight: 600 }}>Active Log Date</span>
@@ -629,7 +635,7 @@ export default function App() {
             type="date" 
             value={selectedDate} 
             onChange={(e) => setSelectedDate(e.target.value)} 
-            style={{ width: 'auto', padding: '0.4rem 0.8rem', borderRadius: '0px' }}
+            style={{ width: 'auto', padding: '0.4rem 0.8rem', borderRadius: '4px', height: '36px' }}
           />
         </div>
 
@@ -639,10 +645,10 @@ export default function App() {
             {/* Left Column: Parsers & Log lists */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               
-               {/* Newsprint Daily Targets */}
+               {/* Bitcoin DeFi Daily Targets */}
               {dayLog && (
                 <div className="card hard-shadow-hover" style={{ padding: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.6rem', marginBottom: '1.25rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Daily Intake Targets</h3>
+                  <h3 style={{ fontSize: '1.4rem', marginBottom: '1.25rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Daily Intake Targets</h3>
                   <div className="macro-progress-grid">
                     {renderProgressBar(dayLog.totals.calories, targets.calories, "Calories", "primary", "kcal")}
                     {renderProgressBar(dayLog.totals.protein, targets.protein, "Protein", "success", "g")}
@@ -656,8 +662,8 @@ export default function App() {
               {/* AI Parser Input Card */}
               <div className="card hard-shadow-hover">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
-                  <Sparkles size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-                  <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Parse Food Intake (AI)</h3>
+                  <Sparkles size={20} style={{ color: 'var(--primary)', strokeWidth: 1.5 }} />
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Parse Food Intake (AI)</h3>
                 </div>
                 
                 <p className="drop-cap" style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '1rem', textAlign: 'justify' }}>
@@ -679,7 +685,7 @@ export default function App() {
                         id="llm-select"
                         value={llmProvider} 
                         onChange={(e) => setLlmProvider(e.target.value)}
-                        style={{ width: 'auto', padding: '0.4rem 0.8rem', borderRadius: '0px' }}
+                        style={{ width: 'auto', padding: '0.2rem 0.5rem', borderRadius: '4px', height: '36px' }}
                       >
                         <option value="groq">Groq (Llama3)</option>
                         <option value="gemini">Gemini</option>
@@ -718,7 +724,7 @@ export default function App() {
 
               {/* Meal Log Blocks */}
               <div>
-                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, marginBottom: '1rem', fontFamily: 'var(--font-serif)', borderBottom: '2px solid var(--border)', paddingBottom: '0.4rem' }}>Today's Food Intake</h3>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '1rem', fontFamily: 'var(--font-heading)', borderBottom: '1px solid var(--border)', paddingBottom: '0.4rem' }}>Today's Food Intake</h3>
                 {dayLog && Object.keys(dayLog.meals).map((mealName) => {
                   const items = dayLog.meals[mealName] || [];
                   const isCollapsed = collapsedMeals[mealName];
@@ -789,8 +795,8 @@ export default function App() {
               {/* Quick Search Autocomplete */}
               <div className="card hard-shadow-hover">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
-                  <Search size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-                  <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Log via Search</h3>
+                  <Search size={20} style={{ color: 'var(--primary)', strokeWidth: 1.5 }} />
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Log via Search</h3>
                 </div>
 
                 <div className="search-container">
@@ -824,7 +830,7 @@ export default function App() {
                 </div>
 
                 {selectedSearchItem && (
-                  <div style={{ marginTop: '1rem', border: '1px solid var(--border)', padding: '1rem', borderRadius: 'var(--radius-sm)' }}>
+                  <div style={{ marginTop: '1rem', border: '1px solid var(--border)', padding: '1rem', borderRadius: '8px' }}>
                     <div style={{ fontWeight: 700, marginBottom: '0.5rem' }}>Selected: {selectedSearchItem.name}</div>
                     
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '1rem' }}>
@@ -870,7 +876,7 @@ export default function App() {
               {/* Macro Summary breakdown list */}
               {dayLog && remaining && (
                 <div className="card hard-shadow-hover inverted-section">
-                  <h3 style={{ fontSize: '1.6rem', fontWeight: 900, marginBottom: '1.25rem', fontFamily: 'var(--font-serif)', borderBottom: '2px solid var(--bg-primary)', paddingBottom: '0.4rem' }}>Remaining Target</h3>
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '1.25rem', fontFamily: 'var(--font-heading)', borderBottom: '1px solid var(--border)', paddingBottom: '0.4rem' }}>Remaining Target</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span>Calories Target</span>
@@ -909,8 +915,8 @@ export default function App() {
             {/* Left Box: Targets Settings */}
             <div className="card hard-shadow-hover">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
-                <Settings size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Set Target Macros</h3>
+                <Settings size={20} style={{ color: 'var(--primary)', strokeWidth: 1.5 }} />
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Set Target Macros</h3>
               </div>
 
               <form onSubmit={handleSaveTargets}>
@@ -964,8 +970,8 @@ export default function App() {
             {/* Right Box: Presets manager */}
             <div className="card hard-shadow-hover">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
-                <Bookmark size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Create Food Presets</h3>
+                <Bookmark size={20} style={{ color: 'var(--primary)', strokeWidth: 1.5 }} />
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Create Food Presets</h3>
               </div>
 
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
@@ -1026,8 +1032,8 @@ export default function App() {
         {activeTab === 'recipes' && (
           <div className="card hard-shadow-hover" style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
-              <ChefHat size={22} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-              <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Formulate Custom Recipe</h3>
+              <ChefHat size={22} style={{ color: 'var(--primary)', strokeWidth: 1.5 }} />
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Formulate Custom Recipe</h3>
             </div>
 
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
@@ -1129,8 +1135,8 @@ export default function App() {
             {/* Left Box: RAG document upload */}
             <div className="card hard-shadow-hover">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
-                <BookOpen size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Upload Knowledge Docs</h3>
+                <BookOpen size={20} style={{ color: 'var(--primary)', strokeWidth: 1.5 }} />
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Upload Knowledge Docs</h3>
               </div>
 
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
@@ -1167,8 +1173,8 @@ export default function App() {
             {/* Right Box: RAG query lookup */}
             <div className="card hard-shadow-hover">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
-                <Search size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Query Knowledge Base</h3>
+                <Search size={20} style={{ color: 'var(--primary)', strokeWidth: 1.5 }} />
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Query Knowledge Base</h3>
               </div>
 
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
