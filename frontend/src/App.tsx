@@ -515,7 +515,7 @@ export default function App() {
     setCollapsedMeals(prev => ({ ...prev, [meal]: !prev[meal] }));
   };
 
-  // Stark Vaporwave Metrics Box
+  // Stark Newsprint Metrics Box
   const renderProgressBar = (value: number, target: number, label: string, _colorClass: string, unit: string) => {
     const pct = Math.min(100, Math.max(0, Math.round((value / target) * 100))) || 0;
     
@@ -523,41 +523,37 @@ export default function App() {
       <div className="macro-ring-container">
         <div className="macro-label">
           <span>{label}</span>
-          <span>{pct}%</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 'bold' }}>{pct}%</span>
         </div>
-        <div className="macro-bar-outline">
-          <div className="macro-bar-fill" style={{ width: `${pct}%` }} />
+        <div style={{ fontSize: '1.75rem', fontWeight: 900, fontFamily: 'var(--font-serif)', margin: '0.15rem 0', lineHeight: 1.1 }}>
+          {value.toFixed(1)} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', fontFamily: 'var(--font-sans)', textTransform: 'uppercase' }}>{unit}</span>
         </div>
-        <div className="macro-values">
-          {value.toFixed(1)} / {target} {unit}
+        <div className="stats-mono" style={{ fontSize: '0.75rem', marginTop: 'auto' }}>
+          Target: {target} {unit}
         </div>
       </div>
     );
   };
 
   return (
-    <div style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', minHeight: '100vh', position: 'relative' }}>
-      {/* Background patterns */}
-      <div className="grid-floor" />
-      <div className="floating-sun" />
-
-      {/* Retro Console Header */}
+    <div style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', minHeight: '100vh' }}>
+      {/* Newspaper Plate Header */}
       <header className="app-header">
         <div className="logo-container">
-          <Sparkles size={24} style={{ color: 'var(--primary)', filter: 'drop-shadow(0 0 8px var(--primary))' }} />
-          FIT_AI.SYS <span className="logo-tag">V1.0</span>
+          THE FITAI CHRONICLE
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-secondary)' }}>
+        <div className="edition-bar">
+          <span>Vol. I — No. 42</span>
+          <span>May 22, 2026</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <span style={{
               width: 8, height: 8,
-              backgroundColor: dbStatus === 'mongodb' ? 'var(--text-secondary)' : 'var(--warning)',
-              display: 'inline-block',
-              boxShadow: dbStatus === 'mongodb' ? '0 0 8px var(--text-secondary)' : 'none'
+              backgroundColor: dbStatus === 'mongodb' ? 'var(--text-primary)' : 'var(--warning)',
+              display: 'inline-block'
             }} />
-            DB_LINK: {dbStatus.toUpperCase()}
+            DB: {dbStatus.toUpperCase()}
           </span>
-          <span style={{ color: 'var(--primary)' }}>SYSTEM_TIME: 2026-05-22</span>
+          <span>Morning Edition</span>
         </div>
       </header>
 
@@ -585,27 +581,25 @@ export default function App() {
         {apiSuccessMsg && (
           <div style={{
             display: 'flex', alignItems: 'center', gap: '0.5rem',
-            backgroundColor: 'rgba(0, 255, 255, 0.1)', color: 'var(--success)',
-            padding: '0.75rem 1rem',
-            border: '2px solid var(--success)', marginBottom: '1rem',
-            boxShadow: '0 0 10px rgba(0, 255, 255, 0.2)',
+            backgroundColor: 'var(--success-light)', color: 'var(--success)',
+            padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)',
+            border: '1px solid rgba(16, 185, 129, 0.2)', marginBottom: '1rem',
             fontSize: '0.9rem', fontWeight: 600
           }}>
             <CheckCircle size={18} />
-            <span>{apiSuccessMsg}</span>
+            {apiSuccessMsg}
           </div>
         )}
         {apiErrorMsg && (
           <div style={{
             display: 'flex', alignItems: 'center', gap: '0.5rem',
-            backgroundColor: 'rgba(255, 0, 255, 0.1)', color: 'var(--primary)',
-            padding: '0.75rem 1rem',
-            border: '2px solid var(--primary)', marginBottom: '1rem',
-            boxShadow: '0 0 10px rgba(255, 0, 255, 0.2)',
+            backgroundColor: 'var(--danger-light)', color: 'var(--danger)',
+            padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)',
+            border: '1px solid rgba(239, 68, 68, 0.2)', marginBottom: '1rem',
             fontSize: '0.9rem', fontWeight: 600
           }}>
             <AlertCircle size={18} />
-            <span>{apiErrorMsg}</span>
+            {apiErrorMsg}
           </div>
         )}
 
@@ -626,24 +620,16 @@ export default function App() {
         </div>
 
         {/* Date Selector Widget */}
-        <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', padding: '2.5rem 1.5rem 1.5rem 1.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-          <div className="terminal-title-bar">
-            <div className="terminal-dots">
-              <span className="terminal-dot dot-magenta" />
-              <span className="terminal-dot dot-cyan" />
-              <span className="terminal-dot dot-orange" />
-            </div>
-            <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>LOG_DATE.EXE</span>
-          </div>
+        <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', padding: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Calendar size={20} style={{ color: 'var(--primary)' }} />
-            <span style={{ fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Active Log Date</span>
+            <span style={{ fontWeight: 600 }}>Active Log Date</span>
           </div>
           <input 
             type="date" 
             value={selectedDate} 
             onChange={(e) => setSelectedDate(e.target.value)} 
-            style={{ width: 'auto', padding: '0.4rem 0.8rem' }}
+            style={{ width: 'auto', padding: '0.4rem 0.8rem', borderRadius: '0px' }}
           />
         </div>
 
@@ -653,18 +639,10 @@ export default function App() {
             {/* Left Column: Parsers & Log lists */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               
-               {/* Vaporwave Daily Targets */}
+               {/* Newsprint Daily Targets */}
               {dayLog && (
-                <div className="card" style={{ padding: '2.5rem 1.5rem 1.5rem 1.5rem' }}>
-                  <div className="terminal-title-bar">
-                    <div className="terminal-dots">
-                      <span className="terminal-dot dot-magenta" />
-                      <span className="terminal-dot dot-cyan" />
-                      <span className="terminal-dot dot-orange" />
-                    </div>
-                    <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>DAILY_TARGETS.SYS</span>
-                  </div>
-                  <h3 style={{ fontSize: '1.4rem', marginBottom: '1.25rem', fontWeight: 900, fontFamily: 'var(--font-heading)' }}>Daily Intake Targets</h3>
+                <div className="card hard-shadow-hover" style={{ padding: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1.6rem', marginBottom: '1.25rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Daily Intake Targets</h3>
                   <div className="macro-progress-grid">
                     {renderProgressBar(dayLog.totals.calories, targets.calories, "Calories", "primary", "kcal")}
                     {renderProgressBar(dayLog.totals.protein, targets.protein, "Protein", "success", "g")}
@@ -676,22 +654,14 @@ export default function App() {
               )}
 
               {/* AI Parser Input Card */}
-              <div className="card" style={{ padding: '2.5rem 1.5rem 1.5rem 1.5rem' }}>
-                <div className="terminal-title-bar">
-                  <div className="terminal-dots">
-                    <span className="terminal-dot dot-magenta" />
-                    <span className="terminal-dot dot-cyan" />
-                    <span className="terminal-dot dot-orange" />
-                  </div>
-                  <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>AI_PARSER.EXE</span>
-                </div>
+              <div className="card hard-shadow-hover">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
-                  <Sparkles size={20} style={{ color: 'var(--primary)', strokeWidth: 1.5 }} />
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 900, fontFamily: 'var(--font-heading)' }}>Parse Food Intake (AI)</h3>
+                  <Sparkles size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
+                  <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Parse Food Intake (AI)</h3>
                 </div>
                 
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1rem', fontFamily: 'var(--font-mono)' }}>
-                  &gt; Enter messy text describing your meals below. The AI parses quantities and names into structured mathematical logs without calculating macros itself.
+                <p className="drop-cap" style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '1rem', textAlign: 'justify' }}>
+                  Enter messy text describing your meals below. The AI parses quantities and names into structured mathematical logs without calculating macros itself. The calculator engine runs calculations against the local seed database.
                 </p>
                 
                 <div className="ai-input-section">
@@ -704,12 +674,12 @@ export default function App() {
                   
                   <div className="ai-controls">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <label htmlFor="llm-select" style={{ margin: 0 }}>Model:</label>
+                      <label htmlFor="llm-select" style={{ margin: 0 }}>Model Provider:</label>
                       <select 
                         id="llm-select"
                         value={llmProvider} 
                         onChange={(e) => setLlmProvider(e.target.value)}
-                        style={{ width: 'auto', padding: '0.4rem 0.8rem' }}
+                        style={{ width: 'auto', padding: '0.4rem 0.8rem', borderRadius: '0px' }}
                       >
                         <option value="groq">Groq (Llama3)</option>
                         <option value="gemini">Gemini</option>
@@ -724,23 +694,23 @@ export default function App() {
                       disabled={parsingLoading || !aiText.trim()}
                     >
                       {parsingLoading ? (
-                        <span>
-                          <Loader2 size={18} className="animate-spin" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '0.25rem' }} />
-                          Parsing...
-                        </span>
+                        <>
+                          <Loader2 size={18} className="animate-spin" />
+                          <span>Parsing Food...</span>
+                        </>
                       ) : (
-                        <span>
-                          <Sparkles size={18} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '0.25rem' }} />
-                          Parse &amp; Log Meal
-                        </span>
+                        <>
+                          <Sparkles size={18} />
+                          <span>Parse & Log Meal</span>
+                        </>
                       )}
                     </button>
                   </div>
                 </div>
 
                 {parseResultString && (
-                  <div className="logs-output-box" style={{ marginTop: '1rem', backgroundColor: '#000000', padding: '1rem', border: '1px solid var(--border)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>
-                    <div style={{ fontWeight: 700, marginBottom: '0.5rem', color: 'var(--primary)' }}>&gt; Raw Parse Math Calculation Results:</div>
+                  <div className="logs-output-box">
+                    <div style={{ fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Raw Parse Math Calculation Results:</div>
                     {parseResultString}
                   </div>
                 )}
@@ -748,7 +718,7 @@ export default function App() {
 
               {/* Meal Log Blocks */}
               <div>
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 900, marginBottom: '1rem', fontFamily: 'var(--font-heading)', borderBottom: '2px solid var(--border)', paddingBottom: '0.4rem' }}>Today's Food Intake</h3>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, marginBottom: '1rem', fontFamily: 'var(--font-serif)', borderBottom: '2px solid var(--border)', paddingBottom: '0.4rem' }}>Today's Food Intake</h3>
                 {dayLog && Object.keys(dayLog.meals).map((mealName) => {
                   const items = dayLog.meals[mealName] || [];
                   const isCollapsed = collapsedMeals[mealName];
@@ -817,18 +787,10 @@ export default function App() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               
               {/* Quick Search Autocomplete */}
-              <div className="card" style={{ padding: '2.5rem 1.5rem 1.5rem 1.5rem' }}>
-                <div className="terminal-title-bar">
-                  <div className="terminal-dots">
-                    <span className="terminal-dot dot-magenta" />
-                    <span className="terminal-dot dot-cyan" />
-                    <span className="terminal-dot dot-orange" />
-                  </div>
-                  <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>DB_SEARCH.EXE</span>
-                </div>
+              <div className="card hard-shadow-hover">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
                   <Search size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 900, fontFamily: 'var(--font-heading)' }}>Log via Search</h3>
+                  <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Log via Search</h3>
                 </div>
 
                 <div className="search-container">
@@ -862,8 +824,8 @@ export default function App() {
                 </div>
 
                 {selectedSearchItem && (
-                  <div style={{ marginTop: '1rem', border: '1px solid var(--border)', padding: '1rem', backgroundColor: '#000000' }}>
-                    <div style={{ fontWeight: 700, marginBottom: '0.5rem', color: 'var(--primary)' }}>&gt; Selected: {selectedSearchItem.name}</div>
+                  <div style={{ marginTop: '1rem', border: '1px solid var(--border)', padding: '1rem', borderRadius: 'var(--radius-sm)' }}>
+                    <div style={{ fontWeight: 700, marginBottom: '0.5rem' }}>Selected: {selectedSearchItem.name}</div>
                     
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '1rem' }}>
                       <div>
@@ -897,11 +859,9 @@ export default function App() {
 
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <button className="btn-success" style={{ flex: 1 }} onClick={handleAddSearchItem}>
-                        <span><Plus size={16} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '0.25rem' }} /> Log Food</span>
+                        <Plus size={16} /> Log Food
                       </button>
-                      <button className="btn-secondary" onClick={() => setSelectedSearchItem(null)}>
-                        <span>Cancel</span>
-                      </button>
+                      <button className="btn-secondary" onClick={() => setSelectedSearchItem(null)}>Cancel</button>
                     </div>
                   </div>
                 )}
@@ -909,40 +869,32 @@ export default function App() {
 
               {/* Macro Summary breakdown list */}
               {dayLog && remaining && (
-                <div className="card" style={{ padding: '2.5rem 1.5rem 1.5rem 1.5rem' }}>
-                  <div className="terminal-title-bar">
-                    <div className="terminal-dots">
-                      <span className="terminal-dot dot-magenta" />
-                      <span className="terminal-dot dot-cyan" />
-                      <span className="terminal-dot dot-orange" />
-                    </div>
-                    <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>MACRO_REMAINING.EXE</span>
-                  </div>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 900, marginBottom: '1.25rem', fontFamily: 'var(--font-heading)', borderBottom: '2px solid var(--border)', paddingBottom: '0.4rem' }}>Remaining Target</h3>
+                <div className="card hard-shadow-hover inverted-section">
+                  <h3 style={{ fontSize: '1.6rem', fontWeight: 900, marginBottom: '1.25rem', fontFamily: 'var(--font-serif)', borderBottom: '2px solid var(--bg-primary)', paddingBottom: '0.4rem' }}>Remaining Target</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: 'var(--text-primary)' }}>Calories Target</span>
-                      <span style={{ fontWeight: 700, color: 'var(--success)' }}>
+                      <span>Calories Target</span>
+                      <span style={{ fontWeight: 700 }}>
                         {remaining.calories} kcal remaining
                       </span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: 'var(--text-primary)' }}>Protein (HP)</span>
-                      <span style={{ fontWeight: 700, color: 'var(--success)' }}>
+                      <span>Protein (HP)</span>
+                      <span style={{ fontWeight: 700 }}>
                         {remaining.protein}g remaining
                       </span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: 'var(--text-primary)' }}>Carbohydrates</span>
-                      <span style={{ fontWeight: 700, color: 'var(--success)' }}>{remaining.carbs}g remaining</span>
+                      <span>Carbohydrates</span>
+                      <span style={{ fontWeight: 700 }}>{remaining.carbs}g remaining</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: 'var(--text-primary)' }}>Fats</span>
-                      <span style={{ fontWeight: 700, color: 'var(--success)' }}>{remaining.fat}g remaining</span>
+                      <span>Fats</span>
+                      <span style={{ fontWeight: 700 }}>{remaining.fat}g remaining</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: 'var(--text-primary)' }}>Fiber</span>
-                      <span style={{ fontWeight: 700, color: 'var(--success)' }}>{remaining.fiber}g remaining</span>
+                      <span>Fiber</span>
+                      <span style={{ fontWeight: 700 }}>{remaining.fiber}g remaining</span>
                     </div>
                   </div>
                 </div>
@@ -955,18 +907,10 @@ export default function App() {
         {activeTab === 'presets' && (
           <div className="grid-dashboard">
             {/* Left Box: Targets Settings */}
-            <div className="card" style={{ padding: '2.5rem 1.5rem 1.5rem 1.5rem' }}>
-              <div className="terminal-title-bar">
-                <div className="terminal-dots">
-                  <span className="terminal-dot dot-magenta" />
-                  <span className="terminal-dot dot-cyan" />
-                  <span className="terminal-dot dot-orange" />
-                </div>
-                <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>TARGET_SETTING.SYS</span>
-              </div>
+            <div className="card hard-shadow-hover">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
                 <Settings size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 900, fontFamily: 'var(--font-heading)' }}>Set Target Macros</h3>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Set Target Macros</h3>
               </div>
 
               <form onSubmit={handleSaveTargets}>
@@ -1013,29 +957,19 @@ export default function App() {
                   </div>
                 </div>
 
-                <button type="submit" className="btn-primary">
-                  <span>Save Targets</span>
-                </button>
+                <button type="submit" className="btn-primary">Save Targets</button>
               </form>
             </div>
 
             {/* Right Box: Presets manager */}
-            <div className="card" style={{ padding: '2.5rem 1.5rem 1.5rem 1.5rem' }}>
-              <div className="terminal-title-bar">
-                <div className="terminal-dots">
-                  <span className="terminal-dot dot-magenta" />
-                  <span className="terminal-dot dot-cyan" />
-                  <span className="terminal-dot dot-orange" />
-                </div>
-                <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>PRESET_BUILDER.SYS</span>
-              </div>
+            <div className="card hard-shadow-hover">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
                 <Bookmark size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 900, fontFamily: 'var(--font-heading)' }}>Create Food Presets</h3>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Create Food Presets</h3>
               </div>
 
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem', fontFamily: 'var(--font-mono)' }}>
-                &gt; Map a customizable unit (like 1 roti) to an exact ingredient gram value (like 43g wheat flour).
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
+                Map a customizable unit (like 1 roti) to an exact ingredient gram value (like 43g wheat flour) for high accuracy calculations.
               </p>
 
               <form onSubmit={handleSavePreset}>
@@ -1082,9 +1016,7 @@ export default function App() {
                   </div>
                 </div>
 
-                <button type="submit" className="btn-success">
-                  <span>Save Preset</span>
-                </button>
+                <button type="submit" className="btn-success">Save Preset</button>
               </form>
             </div>
           </div>
@@ -1092,22 +1024,14 @@ export default function App() {
 
         {/* TAB 3: CUSTOM RECIPES */}
         {activeTab === 'recipes' && (
-          <div className="card" style={{ maxWidth: '800px', margin: '0 auto', padding: '2.5rem 1.5rem 1.5rem 1.5rem' }}>
-            <div className="terminal-title-bar">
-              <div className="terminal-dots">
-                <span className="terminal-dot dot-magenta" />
-                <span className="terminal-dot dot-cyan" />
-                <span className="terminal-dot dot-orange" />
-              </div>
-              <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>RECIPE_ENGINE.EXE</span>
-            </div>
+          <div className="card hard-shadow-hover" style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
               <ChefHat size={22} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 900, fontFamily: 'var(--font-heading)' }}>Formulate Custom Recipe</h3>
+              <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Formulate Custom Recipe</h3>
             </div>
 
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', fontFamily: 'var(--font-mono)' }}>
-              &gt; Save customized home recipes (e.g. Mixed Paneer Sabji). Log servings later. The tracker splits and scales ingredients.
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
+              Save customized home recipes (e.g. Mixed Paneer Sabji). Log servings later. The tracker splits and scales ingredients.
             </p>
 
             <form onSubmit={handleCreateRecipe}>
@@ -1147,7 +1071,7 @@ export default function App() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                   <label style={{ margin: 0 }}>Ingredients List</label>
                   <button type="button" className="btn-secondary" style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }} onClick={handleAddIngredientRow}>
-                    <span>+ Add Ingredient</span>
+                    + Add Ingredient
                   </button>
                 </div>
 
@@ -1194,9 +1118,7 @@ export default function App() {
                 ))}
               </div>
 
-              <button type="submit" className="btn-primary">
-                <span>Save Recipe Formulation</span>
-              </button>
+              <button type="submit" className="btn-primary">Save Recipe Formulation</button>
             </form>
           </div>
         )}
@@ -1205,22 +1127,14 @@ export default function App() {
         {activeTab === 'rag' && (
           <div className="grid-dashboard">
             {/* Left Box: RAG document upload */}
-            <div className="card" style={{ padding: '2.5rem 1.5rem 1.5rem 1.5rem' }}>
-              <div className="terminal-title-bar">
-                <div className="terminal-dots">
-                  <span className="terminal-dot dot-magenta" />
-                  <span className="terminal-dot dot-cyan" />
-                  <span className="terminal-dot dot-orange" />
-                </div>
-                <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>DOC_UPLOAD.SYS</span>
-              </div>
+            <div className="card hard-shadow-hover">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
                 <BookOpen size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 900, fontFamily: 'var(--font-heading)' }}>Upload Knowledge Docs</h3>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Upload Knowledge Docs</h3>
               </div>
 
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem', fontFamily: 'var(--font-mono)' }}>
-                &gt; Paste nutrition/diet guidelines, doctor recommendations, or calorie indexes to local TF-IDF search database.
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
+                Paste nutrition/diet guidelines, doctor recommendations, or calorie indexes to local TF-IDF search database.
               </p>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -1245,28 +1159,20 @@ export default function App() {
                 </div>
 
                 <button className="btn-primary" onClick={handleUploadRAG} disabled={!ragDocText.trim()}>
-                  <span>Upload Document</span>
+                  Upload Document
                 </button>
               </div>
             </div>
 
             {/* Right Box: RAG query lookup */}
-            <div className="card" style={{ padding: '2.5rem 1.5rem 1.5rem 1.5rem' }}>
-              <div className="terminal-title-bar">
-                <div className="terminal-dots">
-                  <span className="terminal-dot dot-magenta" />
-                  <span className="terminal-dot dot-cyan" />
-                  <span className="terminal-dot dot-orange" />
-                </div>
-                <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>DOC_QUERY.SYS</span>
-              </div>
+            <div className="card hard-shadow-hover">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
                 <Search size={20} style={{ color: 'var(--primary-hover)', strokeWidth: 1.5 }} />
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 900, fontFamily: 'var(--font-heading)' }}>Query Knowledge Base</h3>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 900, fontFamily: 'var(--font-serif)' }}>Query Knowledge Base</h3>
               </div>
 
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem', fontFamily: 'var(--font-mono)' }}>
-                &gt; Query matching chunks in RAG database. Returns closest matches with TF-IDF cosine similarity scores.
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
+                Query matching chunks in RAG database. Returns closest matches with TF-IDF cosine similarity scores.
               </p>
 
               <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
@@ -1277,7 +1183,7 @@ export default function App() {
                   onChange={(e) => setRagQuery(e.target.value)}
                 />
                 <button className="btn-success" onClick={handleQueryRAG} disabled={!ragQuery.trim()}>
-                  <span>Query</span>
+                  Query
                 </button>
               </div>
 
@@ -1286,7 +1192,7 @@ export default function App() {
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {ragMatches.map((match, idx) => (
-                    <div key={idx} style={{ border: '2px solid var(--border)', padding: '1rem', backgroundColor: '#000000' }}>
+                    <div key={idx} style={{ border: '1px solid var(--border)', padding: '1rem', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--bg-tertiary)' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', marginBottom: '0.5rem' }}>
                         <span>Source: {match.source}</span>
                         <span>Score: {match.score.toFixed(3)}</span>
