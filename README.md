@@ -4,6 +4,8 @@ FitAI is a lightweight, high-performance, and visually stunning AI-powered calor
 
 Built with **FastAPI**, **React (TypeScript + Vite)**, and a dual **MongoDB / In-Memory Mock Database Fallback**, FitAI parses messy food intake logs, matches ingredients, evaluates recipes, and computes accurate macros.
 
+![Workflow and Dashboard Screenshot](docs/images/workflow.png)
+
 ---
 
 ## 🌟 Key Features
