@@ -35,6 +35,25 @@ graph TD
 
 ---
 
+## 📸 Application Demo Walkthrough
+
+### 1. Dynamic User Profile Switcher & Dashboard Targets
+FitAI tracks daily calories and baseline macro metrics dynamically mapped to the current active user profile selected via the `NODE_USER` context.
+
+### 2. Multi-User Administration Console
+Administrator accounts gain access to the secure system console to register regular/admin profiles and manage target parameters:
+![System Admin Panel](docs/images/admin_panel.png)
+
+### 3. AI Food Log Parser
+Input sloppy, unstructured phrasing such as `"snack 1 cup masala tea 2 digestives"` and standardise it instantly with full macro accreditation details:
+![AI Parser Confirmation](docs/images/ai_parser_confirmation.png)
+
+### 4. Interactive Meal Relocator
+Easily adjust food logs by re-categorizing logged items across breakfast, lunch, dinner, or snack lists using the select control next to each item row:
+![Relocate Logged Item](docs/images/relocate_item.png)
+
+---
+
 ## ⚙️ Environment Variables (`.env`)
 
 Create a `.env` file in the root workspace folder:
