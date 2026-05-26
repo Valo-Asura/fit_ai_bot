@@ -443,6 +443,10 @@ async def list_users():
         
     for u in users:
         u.pop("_id", None)
+        if "role" not in u:
+            u["role"] = "user"
+        if "name" not in u:
+            u["name"] = "Default User" if u.get("user_id") == "default" else u.get("user_id", "Unknown User")
     return users
 
 @app.post("/api/users")

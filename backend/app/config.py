@@ -15,6 +15,13 @@ class Settings(BaseSettings):
     PINECONE_CLOUD: str = Field(default="aws", validation_alias="PINECONE_CLOUD")
     PINECONE_REGION: str = Field(default="us-east-1", validation_alias="PINECONE_REGION")
     
+    # Qdrant
+    QDRANT_HOST: str = Field(default="localhost", validation_alias="QDRANT_HOST")
+    QDRANT_PORT: int = Field(default=6333, validation_alias="QDRANT_PORT")
+    QDRANT_COLLECTION_NAME: str = Field(default="fit_ai_knowledge", validation_alias="QDRANT_COLLECTION_NAME")
+    QDRANT_API_KEY: str = Field(default="", validation_alias="QDRANT_API_KEY")
+
+    
     # API Keys & Models
     GROQ_API_KEY: str = Field(default="", validation_alias="GROQ_API_KEY")
     GROQ_MODEL: str = Field(default="llama3-70b-8192", validation_alias="GROQ_MODEL")

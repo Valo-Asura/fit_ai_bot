@@ -883,7 +883,7 @@ export default function App() {
             >
               {users.map(u => (
                 <option key={u.user_id} value={u.user_id}>
-                  {u.name} ({u.role.toUpperCase()})
+                  {u.name || u.user_id} ({(u.role || 'user').toUpperCase()})
                 </option>
               ))}
             </select>

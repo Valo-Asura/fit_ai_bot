@@ -8,6 +8,42 @@ from app.config import settings
 
 logger = logging.getLogger("fit_ai.rag")
 
+# Initialize Qdrant RAG integration
+use_qdrant = False
+qdrant_client = None
+
+if settings.QDRANT_HOST and settings.GEMINI_API_KEY:
+    try:
+        import google.generativeai as genai
+        from qdrant_client import QdrantClient
+        from qdrant_client.http import models as qdrant_models
+        
+        genai.configure(api_key=settings.GEMINI_API_KEY)
+        
+        # Connect to Qdrant
+        if settings.QDRANT_HOST.startswith("http://") or settings.QDRANT_HOST.startswith("https://"):
+            qdrant_client = QdrantClient(url=settings.QDRANT_HOST, api_key=settings.QDRANT_API_KEY or None)
+        elif settings.QDRANT_HOST == ":memory:":
+            qdrant_client = QdrantClient(location=":memory:")
+        else:
+            qdrant_client = QdrantClient(host=settings.QDRANT_HOST, port=settings.QDRANT_PORT, api_key=settings.QDRANT_API_KEY or None)
+            
+        # Check if collection exists, create if not
+        if not qdrant_client.collection_exists(collection_name=settings.QDRANT_COLLECTION_NAME):
+            logger.info(f"Creating Qdrant collection: {settings.QDRANT_COLLECTION_NAME}...")
+            qdrant_client.create_collection(
+                collection_name=settings.QDRANT_COLLECTION_NAME,
+                vectors_config=qdrant_models.VectorParams(
+                    size=768,  # models/text-embedding-004 has 768 dimensions
+                    distance=qdrant_models.Distance.COSINE
+                )
+            )
+            
+        use_qdrant = True
+        logger.info("Successfully connected to Qdrant vector database.")
+    except Exception as e:
+        logger.warning(f"Failed to initialize Qdrant client: {e}. Falling back to Pinecone/TF-IDF RAG.")
+
 # Initialize Pinecone and Gemini RAG integration
 use_pinecone = False
 pc = None
@@ -164,6 +200,40 @@ async def sync_rag_index():
         rag_store.fit_and_add(docs)
         logger.info(f"RAG TF-IDF search index synchronized with {len(docs)} documents.")
         
+        # Optionally seed Qdrant if index is empty
+        if use_qdrant and qdrant_client:
+            try:
+                collection_info = qdrant_client.get_collection(collection_name=settings.QDRANT_COLLECTION_NAME)
+                if collection_info.points_count == 0 and docs:
+                    logger.info("Qdrant index is empty. Seeding existing knowledge base...")
+                    from qdrant_client.http import models as qdrant_models
+                    points = []
+                    point_idx = 0
+                    for doc in docs:
+                        doc_id = str(doc["_id"])
+                        text = doc.get("text", "")
+                        source = doc.get("source", "upload")
+                        paragraphs = [p.strip() for p in re.split(r"\n\n+", text) if p.strip()]
+                        for idx, p in enumerate(paragraphs):
+                            emb = await get_embedding(p)
+                            points.append(
+                                qdrant_models.PointStruct(
+                                    id=point_idx,
+                                    vector=emb,
+                                    payload={"text": p, "source": source, "doc_id": doc_id, "paragraph_idx": idx}
+                                )
+                            )
+                            point_idx += 1
+                    if points:
+                        qdrant_client.upsert(
+                            collection_name=settings.QDRANT_COLLECTION_NAME,
+                            wait=True,
+                            points=points
+                        )
+                    logger.info("Qdrant database seeding completed successfully.")
+            except Exception as qe:
+                logger.warning(f"Failed to auto-seed Qdrant index: {qe}")
+                
         # Optionally seed Pinecone if index is empty
         if use_pinecone and pinecone_index:
             try:
@@ -203,6 +273,31 @@ async def add_document(text: str, source: str = "upload") -> str:
     result = await knowledge_documents_collection.insert_one(doc)
     doc_id = str(result.inserted_id)
     
+    # Save/index to Qdrant if enabled
+    if use_qdrant and qdrant_client:
+        try:
+            from qdrant_client.http import models as qdrant_models
+            import uuid
+            paragraphs = [p.strip() for p in re.split(r"\n\n+", escaped_text) if p.strip()]
+            points = []
+            for idx, p in enumerate(paragraphs):
+                emb = await get_embedding(p)
+                points.append(
+                    qdrant_models.PointStruct(
+                        id=str(uuid.uuid4()),
+                        vector=emb,
+                        payload={"text": p, "source": source, "doc_id": doc_id, "paragraph_idx": idx}
+                    )
+                )
+            if points:
+                qdrant_client.upsert(
+                    collection_name=settings.QDRANT_COLLECTION_NAME,
+                    points=points
+                )
+            logger.info(f"Indexed document {doc_id} to Qdrant vector store ({len(paragraphs)} chunks).")
+        except Exception as e:
+            logger.error(f"Failed to index to Qdrant: {e}")
+            
     # Save/index to Pinecone if enabled
     if use_pinecone and pinecone_index:
         try:
@@ -224,8 +319,29 @@ async def add_document(text: str, source: str = "upload") -> str:
 
 async def query_rag(query: str) -> List[Dict]:
     """
-    Queries the RAG index using Pinecone if available, otherwise falling back to TF-IDF.
+    Queries the RAG index using Qdrant if available, falling back to Pinecone or TF-IDF.
     """
+    if use_qdrant and qdrant_client:
+        try:
+            emb = await get_embedding(query)
+            res = qdrant_client.search(
+                collection_name=settings.QDRANT_COLLECTION_NAME,
+                query_vector=emb,
+                limit=3
+            )
+            matches = []
+            for hit in res:
+                payload = hit.payload or {}
+                matches.append({
+                    "text": payload.get("text", ""),
+                    "source": payload.get("source", "upload"),
+                    "score": round(hit.score, 4)
+                })
+            if matches:
+                return matches
+        except Exception as e:
+            logger.error(f"Qdrant query failed, falling back to Pinecone/TF-IDF: {e}")
+
     if use_pinecone and pinecone_index:
         try:
             emb = await get_embedding(query)
